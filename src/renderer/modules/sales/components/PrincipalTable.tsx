@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { ProductRow } from './App';
+import { ProductRow } from '../../../components/App';
 import React from 'react'
 const StyledGridOverlay = styled('div')(({ theme }) => ({
   display: 'flex',

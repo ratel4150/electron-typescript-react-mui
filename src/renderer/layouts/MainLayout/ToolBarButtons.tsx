@@ -1,7 +1,18 @@
 import { Button, Stack, Typography } from '@mui/material';
 import React from 'react'
 import { MdSell, MdPeople, MdInventory, MdSettings, MdReceipt, MdReport, MdExitToApp } from "react-icons/md";
-function ToolBarButtons(): JSX.Element {
+
+interface ToolBarButtonsProps {
+  onButtonClick: (label: string) => void; // Propiedad para manejar el clic
+}
+const ToolBarButtons: React.FC<ToolBarButtonsProps> = ({ onButtonClick }) => {
+  const [activeButton, setActiveButton] = React.useState<string | null>(null);
+
+
+  const handleButtonClick = (label: string) => {
+    setActiveButton(label); // Marca el botón como activo
+    onButtonClick(label);   // Llama a la función de clic del padre
+  };
     const BotonesBarraHerramientas = [
         "F1 Ventas",
         "F2 Clientes",
@@ -47,6 +58,7 @@ function ToolBarButtons(): JSX.Element {
           fullWidth
           variant="outlined"
           startIcon={<Icono />} // Usa el ícono correspondiente
+          onClick={() => handleButtonClick(label)}
           sx={{
             flexGrow: 1, // Asegura que los botones ocupen el ancho disponible
             minWidth: 100, // Ancho mínimo para cada botón
@@ -55,6 +67,12 @@ function ToolBarButtons(): JSX.Element {
             fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' }, // Tamaño de fuente adaptable
             px: 2, // Padding interno para un buen ajuste
             aspectRatio: '3 / 1', // Relación de aspecto de 3:1
+            backgroundColor: activeButton === label ? 'primary.main' : 'inherit',
+            color: activeButton === label ? 'white' : 'primary.main',
+            '&:hover': {
+              backgroundColor: activeButton === label ? 'primary.main' : 'primary.light',
+              color: activeButton === label ? 'primary.main' : 'white',
+            },
           }}
         >
           <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: "0.8rem" }}>

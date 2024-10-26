@@ -2,10 +2,9 @@ import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import React from "react";
 import theme from "../theme";
 
-import ToolBarButtons from "./ToolBarButtons";
-import PrincipalBanner from "./PrincipalBanner";
-import SearchBarProducts from "./SearchBarProducts";
-import PrincipalTable from "./PrincipalTable";
+
+import MainLayout from "../layouts/MainLayout/MainLayout";
+
 
 // Define the types for the rows in the table
 export interface ProductRow {
@@ -41,14 +40,15 @@ export default function App(): JSX.Element {
           backgroundColor: (theme) => theme.palette.background.default,
         }}
       >
-        <main>
-          {/* This is where your app content should go */}
-          <ToolBarButtons/>
+       <main>
+        <MainLayout/>
+        
+        {/*   <ToolBarButtons/>
           <PrincipalBanner/>
           <SearchBarProducts/>
           <ToolBarButtons/>
-          <PrincipalTable productosTicket={rows}/>
-        </main>
+          <PrincipalTable productosTicket={rows}/> */}
+       </main> 
       </Box>
     </ThemeProvider>
   );
