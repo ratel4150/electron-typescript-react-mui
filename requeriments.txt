@@ -1,0 +1,29 @@
+Base de datos 
+Producto (Product): Detalles extensos sobre cada producto, incluyendo características personalizadas y relaciones complejas.
+Departamento (Department): Jerarquía de productos con múltiples subcategorías y atributos.
+Cliente (Customer): Información integral sobre clientes, incluyendo historial de compras y puntuación de lealtad.
+Ticket (Ticket): Detalle de transacciones con múltiples formas de pago, descuentos, y devolución de productos.
+Detalle del Ticket (TicketDetail): Información precisa sobre cada producto en la transacción, incluyendo trazabilidad de inventario.
+Factura (Invoice): Registro completo de transacciones, incluyendo impuestos, condiciones de pago, y métodos de envío.
+Corte de Caja (CashClosure): Informes detallados sobre cierres de caja, incluyendo conciliaciones y auditorías.
+Promoción (Promotion): Múltiples tipos de promociones, como descuentos por volumen, ofertas por tiempo limitado, y programas de referidos.
+Inventario (Inventory): Gestión avanzada de inventario, incluyendo seguimiento de lotes y ubicación en el almacén.
+Movimientos de Inventario (InventoryMovement): Registro de todas las entradas y salidas con motivos y responsables.
+Kardex de Inventario (InventoryKardex): Historial completo de movimientos de cada producto en el inventario.
+Configuración General (GeneralConfiguration): Preferencias del sistema, configuraciones de impuestos y personalización de la interfaz.
+Usuario (User): Gestión de usuarios con roles avanzados, permisos y registro de actividad.
+Reporte de Ventas (SalesReport): Informes personalizados de ventas, segmentados por cliente, producto y periodo.
+Programa de Lealtad (LoyaltyProgram): Detalles de los programas de lealtad, incluyendo niveles, recompensas y métricas.
+Transacción de Lealtad (LoyaltyTransaction): Registro de todas las transacciones que afectan la puntuación de lealtad.
+Historial de Pagos (PaymentHistory): Detalle de todos los pagos realizados, con su método y estado.
+Configuración de Impuestos (TaxConfiguration): Información detallada sobre impuestos aplicables, exenciones y ajustes.
+Auditoría (Audit): Registro exhaustivo de cambios en el sistema, con rastreo de usuarios y acciones.
+Historial de Descuentos (DiscountHistory): Registro detallado de todos los descuentos aplicados en las transacciones.
+Servicio (Service): Detalles de servicios ofrecidos, sus precios y su relación con los productos.
+Inventario de Servicios (ServiceInventory): Gestión de disponibilidad de servicios, similar al inventario de productos.
+Programa de Capacitación (TrainingProgram): Capacitación para empleados sobre el uso del sistema y atención al cliente.
+Historial de Clientes (CustomerHistory): Registro de todas las interacciones con los clientes, incluyendo quejas y feedback.
+Configuración de Alertas (AlertConfiguration): Configuraciones para alertas de inventario bajo, promociones, y reportes.
+Rol (Role): Gestión de roles de usuario.
+Sesión (Session): Detalles de la sesión activa del usuario.
+Cajero (Cashier): Información sobre el cajero en la operación.

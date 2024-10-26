@@ -39,6 +39,32 @@ const ToolBarButtons: React.FC<ToolBarButtonsProps> = ({ onButtonClick }) => {
     MdExitToApp, // Icono para Salir
   ];
 
+   // Asocia las teclas con las etiquetas de los botones
+   const keyToButtonMap: { [key: string]: string } = {
+    F1: "F1 Ventas",
+    F2: "F2 Clientes",
+    F3: "F3 Productos",
+    F4: "F4 Inventarios",
+  };
+
+  React.useEffect(() => {
+    // Función para manejar el evento de teclado
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const buttonLabel = keyToButtonMap[event.key];
+      if (buttonLabel) {
+        handleButtonClick(buttonLabel);
+      }
+    };
+
+    // Agregar el evento global de teclado
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Limpiar el evento al desmontar el componente
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <Stack
     direction="row"
