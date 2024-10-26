@@ -1,25 +1,25 @@
+// src/db/models/Service.js
 import { DataTypes } from 'sequelize';
 
 export default (sequelize) => {
-  const Sales = sequelize.define('Sales', {
+  const Service = sequelize.define('Service', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    product: {
+    nombre: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    amount: {
-      type: DataTypes.DECIMAL(10, 2),
+    precio: {
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
-    date: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
+  }, {
+    tableName: 'services',
+    timestamps: false,
   });
 
-  return Sales;
+  return Service;
 };
