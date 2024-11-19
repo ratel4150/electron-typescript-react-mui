@@ -15,6 +15,10 @@ function createWindow() {
       devTools: process.env.NODE_ENV !== "production",
     },
   });
+  // Abre las DevTools automáticamente en modo desarrollo
+if (process.env.NODE_ENV === 'development') {
+  mainWindow.webContents.openDevTools();
+}
 
   if (process.env.NODE_ENV === "development") {
     mainWindow.loadURL("http://localhost:4000");

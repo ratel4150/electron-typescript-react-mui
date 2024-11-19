@@ -18,7 +18,7 @@ const MainLayout: React.FC = () => {
   const renderContent = () => {
     switch (currentView) {
       case "F1 Ventas":
-        return <SalesDashBoard />;
+        return <div>Sales Component</div>;
       // Agrega aquí los demás componentes para cada botón según sea necesario
       case "F2 Clientes":
         return <div>Clientes Component</div>;

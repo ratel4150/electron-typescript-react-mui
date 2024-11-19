@@ -4,6 +4,8 @@ import theme from "../theme";
 
 
 import MainLayout from "../layouts/MainLayout/MainLayout";
+import SignIn from "../layouts/MainLayout/SignIn";
+import { Route, Routes } from "react-router-dom";
 
 
 // Define the types for the rows in the table
@@ -18,6 +20,9 @@ export interface ProductRow {
 }
 
 export default function App(): JSX.Element {
+
+
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
   const rows: ProductRow[] = [
     { id: 1, 'Código de Barras': '7501000134594', 'Descripción del Producto': 'Coca-Cola 600ml', 'Precio Venta': 15, 'Cant.': 2, 'Importe': 30, 'Existencia': 50 },
@@ -34,22 +39,27 @@ export default function App(): JSX.Element {
     // Setup theme and css baseline for the Material-UI app
     // https://mui.com/customization/theming/
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Box
-        sx={{
-          backgroundColor: (theme) => theme.palette.background.default,
-        }}
-      >
-       <main>
-        <MainLayout/>
-        
-        {/*   <ToolBarButtons/>
-          <PrincipalBanner/>
-          <SearchBarProducts/>
-          <ToolBarButtons/>
-          <PrincipalTable productosTicket={rows}/> */}
-       </main> 
-      </Box>
-    </ThemeProvider>
+    <CssBaseline />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Box
+            sx={{
+              backgroundColor: (theme) => theme.palette.background.default,
+            }}
+          >
+            <main>
+              {isAuthenticated ? (
+                <MainLayout />
+              ) : (
+                <SignIn onSignIn={() => setIsAuthenticated(true)} />
+              )}
+            </main>
+          </Box>
+        }
+      />
+    </Routes>
+  </ThemeProvider>
   );
 }
