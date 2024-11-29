@@ -25,8 +25,6 @@ import SalesPerPeriodPage from "../features/product/pages/SalesPerPeriodPage";
 import PromotionsPage from "../features/product/pages/PromotionsPage";
 import ImportProductsPage from "../features/product/pages/ImportProductsPage";
 import CatalogPage from "../features/product/pages/CatalogPage";
-import UpdateProductPage from "../features/product/pages/UpdateProductPage";
-import DeleteProductPage from "../features/product/pages/DeleteProductPage";
 
 
 
@@ -82,108 +80,7 @@ export default function App(): JSX.Element {
         }
       />
     </Routes> */}
-      <Routes>
-        {/* Ruta principal que utiliza MainLayout */}
-        <Route path="/" element={<MainLayout />}>
-          <Route
-            path="ventas"
-            element={
-              <div>
-                <h1>Ventas</h1>
-                <p>Este es el componente de Ventas.</p>
-              </div>
-            }
-          />
-          <Route
-            path="clientes"
-            element={
-              <div>
-                <h1>Clientes</h1>
-                <p>Este es el componente de Clientes.</p>
-              </div>
-            }
-          />
-          <Route
-            path="productos"
-            element={
-              <ProductMainLayout />
-            }
-          >    <Route path="lista" element={<ProductListPage />} />
-            <Route path="agregar" element={<AddProductPage />} />
-            <Route path="modificar" element={<UpdateProductPage />} />
-            <Route path="eliminar" element={<DeleteProductPage />} />
-            <Route path="configuraciones" element={<ProductSettingsPage />} />
-            <Route path="reportes" element={<ProductReportPage />} />
-            <Route path="departamentos" element={<DepartmentPage />} />
-         {/*    <Route path="ventasperiodo" element={<SalesPerPeriodPage />} /> */}
-            <Route path="promociones" element={<PromotionsPage />} />
-            <Route path="importar" element={<ImportProductsPage />} />
-            <Route path="catalogo" element={<CatalogPage />} />
-            {/*  <Route path="agregar" element={<AddProductPage />} /> */}
-
-          </Route>
-          <Route
-            path="inventarios"
-            element={
-              <InventoryMainLayout />
-            }
-          >
-            <Route path="agregar" element={<AddProduct />} />
-            <Route path="ajustes" element={<InventorySettings />} />
-
-            <Route path="productos-bajos" element={<LowInventory />} />
-            <Route path="reporte-inventario" element={<InventoryReport />} />
-            <Route path="reporte-movimientos" element={<MovementReport />} />
-            <Route path="kardex" element={<Kardex />} />
-          </Route>
-          <Route
-            path="configuracion"
-            element={
-              <div>
-                <h1>Configuración</h1>
-                <p>Este es el componente de Configuración.</p>
-              </div>
-            }
-          />
-          <Route
-            path="facturas"
-            element={
-              <div>
-                <h1>Facturas</h1>
-                <p>Este es el componente de Facturas.</p>
-              </div>
-            }
-          />
-          <Route
-            path="corte"
-            element={
-              <div>
-                <h1>Corte</h1>
-                <p>Este es el componente de Corte.</p>
-              </div>
-            }
-          />
-          <Route
-            path="reportes"
-            element={
-              <div>
-                <h1>Reportes</h1>
-                <p>Este es el componente de Reportes.</p>
-              </div>
-            }
-          />
-          <Route
-            path="salir"
-            element={
-              <div>
-                <h1>Salir</h1>
-                <p>Has salido de la aplicación.</p>
-              </div>
-            }
-          />
-          {/* Agrega otras rutas aquí */}
-        </Route>
-      </Routes>
+      <MainLayout />
     </ThemeProvider>
   );
 }

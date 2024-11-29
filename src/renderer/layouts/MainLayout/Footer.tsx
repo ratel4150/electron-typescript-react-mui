@@ -3,9 +3,10 @@ import React from 'react'
 
 function Footer() {
   return (
-    <Box
+    <Box 
     component="footer"
     sx={{
+
       p: 2,
       backgroundColor: (theme) => theme.palette.grey[800],
       color: (theme) => theme.palette.common.white,

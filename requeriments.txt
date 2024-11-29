@@ -27,3 +27,125 @@ Configuración de Alertas (AlertConfiguration): Configuraciones para alertas de 
 Rol (Role): Gestión de roles de usuario.
 Sesión (Session): Detalles de la sesión activa del usuario.
 Cajero (Cashier): Información sobre el cajero en la operación.
+
+
+├───api                          // Controladores y lógica para interactuar con APIs
+│   ├───endpoints                // Organización por endpoint o recurso
+│   │       inventory.ts         // Llamadas relacionadas con inventario
+│   │       sales.ts             // Llamadas relacionadas con ventas
+│   │       auth.ts              // Llamadas relacionadas con autenticación
+│   ├───interceptors             // Interceptores para manejo de errores y autenticación
+│   │       axiosInterceptor.ts
+│   ├───mocks                    // Simulación de datos en desarrollo/testing
+│   │       mockInventory.ts
+│   │       mockSales.ts
+│   └───utils                    // Utilidades API compartidas
+│           fetchWrapper.ts
+│           apiConstants.ts
+│
+├───assets                       // Recursos estáticos globales
+│   ├───fonts
+│   ├───icons
+│   ├───images
+│   └───styles                   // Estilos compartidos
+│           global.css
+│           theme.ts
+│
+├───components                   // Componentes UI reutilizables y agnósticos al dominio
+│   ├───forms                    // Componentes de formularios genéricos
+│   │       TextField.tsx
+│   │       Select.tsx
+│   │       Checkbox.tsx
+│   ├───tables                   // Componentes de tablas genéricos
+│   │       DataTable.tsx
+│   │       PaginatedTable.tsx
+│   ├───modals                   // Modales reutilizables
+│   │       ConfirmationModal.tsx
+│   │       FormModal.tsx
+│   └───widgets                  // Widgets genéricos
+│           Card.tsx
+│           Avatar.tsx
+│
+├───config                       // Configuraciones del sistema
+│       routes.ts                // Rutas y navegación centralizada
+│       constants.ts             // Constantes globales
+│       environment.ts           // Configuración de entornos
+│       i18n.ts                  // Configuración para traducciones
+│
+├───core                         // Funcionalidades esenciales para el sistema
+│   ├───auth                     // Módulo central de autenticación
+│   │       AuthProvider.tsx     // Contexto o Provider para autenticación
+│   │       useAuth.ts           // Hook personalizado para autenticación
+│   │       authService.ts       // Lógica para autenticación
+│   └───state                    // Gestión de estado global (Redux/Zustand/MobX)
+│           store.ts             // Configuración global del store
+│           slices/              // Reducers organizados por dominio
+│               inventorySlice.ts
+│               salesSlice.ts
+│
+├───features                     // Dividido por funcionalidades/dominios
+│   ├───inventory                // Dominio de inventarios
+│   │   ├───components           // Componentes UI específicos del dominio
+│   │   │       InventoryTable.tsx
+│   │   │       ProductForm.tsx
+│   │   │       LowStockAlert.tsx
+│   │   ├───containers           // Contenedores para lógica de presentación
+│   │   │       InventoryContainer.tsx
+│   │   │       AddProductContainer.tsx
+│   │   ├───pages                // Páginas del dominio
+│   │   │       AddProductPage.tsx
+│   │   │       InventoryPage.tsx
+│   │   │       SettingsPage.tsx
+│   │   ├───services             // Lógica de negocios
+│   │   │       inventoryService.ts
+│   │   ├───tests                // Pruebas específicas del dominio
+│   │   │       InventoryService.test.ts
+│   │   └───types                // Tipos y interfaces
+│   │           inventoryTypes.ts
+│   │
+│   ├───sales                    // Dominio de ventas
+│   │   ├───components
+│   │   ├───containers
+│   │   ├───pages
+│   │   ├───services
+│   │   ├───tests
+│   │   └───types
+│   │
+│   └───auth                     // Dominio de autenticación
+│       ├───components
+│       ├───containers
+│       ├───pages
+│       ├───services
+│       ├───tests
+│       └───types
+│
+├───hooks                        // Hooks reutilizables, organizados por propósito
+│       useFetch.ts              // Hook personalizado para llamadas API
+│       useModal.ts              // Hook para manejar modales
+│       usePagination.ts         // Hook para paginación
+│
+├───layouts                      // Diseños para diferentes contextos
+│   ├───InventoryLayout          // Layout para vistas relacionadas con inventarios
+│   │       InventoryMainLayout.tsx
+│   ├───MainLayout               // Layout principal del sistema
+│   │       MainLayout.tsx
+│   └───AuthLayout               // Layout para vistas de autenticación
+│           AuthLayout.tsx
+│
+├───routes                       // Navegación del sistema
+│       AppRoutes.tsx            // Configuración completa de rutas con React Router
+│       ProtectedRoute.tsx       // Ruta protegida para autenticación
+│
+├───services                     // Lógica de negocio compartida
+│       notificationService.ts   // Lógica para notificaciones
+│       analyticsService.ts      // Lógica para analytics
+│
+├───tests                        // Pruebas globales
+│   ├───unit                     // Pruebas unitarias
+│   ├───integration              // Pruebas de integración
+│   └───e2e                      // Pruebas end-to-end (Cypress/Playwright)
+│
+└───utils                        // Utilidades compartidas
+        dateUtils.ts             // Manejo de fechas
+        stringUtils.ts           // Manipulación de strings
+        validationUtils.ts       // Validaciones comunes

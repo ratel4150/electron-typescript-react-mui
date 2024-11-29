@@ -3,7 +3,7 @@ import React from 'react'
 
 function Header() {
   return (
-    <AppBar position="static">
+    <AppBar position="static" >
     <Toolbar>
       <Typography variant="h6">POS System</Typography>
     </Toolbar>
