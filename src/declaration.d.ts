@@ -1,4 +1,4 @@
-// Required to allow importing images with webpack in typescript
+// src\declaration.d.ts
 declare module "*.png";
 declare module "*.jpg";
 declare module "*.svg";

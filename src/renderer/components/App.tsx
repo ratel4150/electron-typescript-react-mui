@@ -1,3 +1,4 @@
+// src\renderer\components\App.tsx
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import React from "react";
 import theme from "../theme";

@@ -1,3 +1,4 @@
+// src\renderer\features\product\components\ProductForm.tsx
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Box, Typography, MenuItem, FormControlLabel, Checkbox, AlertProps, Snackbar, Alert } from '@mui/material';
 import { Product } from '../types/productTypes';

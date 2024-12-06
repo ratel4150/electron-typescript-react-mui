@@ -1,96 +1,114 @@
-import React, { useState } from 'react'
-import ProductFinder from '../components/ProductFinder'
-import { getProductsByBarCode, updateProduct } from '../services/productService';
-import { Product } from '../types/productTypes';
-import { Alert, AlertProps, Box, Snackbar, Typography } from '@mui/material';
-import ProductForm from '../components/ProductForm';
-import useProduct from '../hook/useProduct';
+// src\renderer\features\product\containers\UpdateProductContainer.tsx
+import React, { useState } from "react";
+import ProductFinder from "../components/ProductFinder";
+import { getProductsByBarCode } from "../services/productService";
+import { Product } from "../types/productTypes";
+import {
+  Alert,
+  AlertProps,
+  Box,
+  CircularProgress,
+  Snackbar,
+  Typography,
+} from "@mui/material";
+import ProductForm from "../components/ProductForm";
+import useProduct from "../../../hooks/useProduct";
 
 const UpdateProductContainer: React.FC = () => {
-    const { updateExistingProduct } = useProduct(); // Obtienes la función de actualización
-    const [product, setProduct] = useState<Product | null>(null); // Almacena una lista de productos
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
-    const handleSearch = async (barCode:string) => {
-      setLoading(true);
-      setError(null);
-      setProduct(null);
-  
-      try {
-        const productData = await getProductsByBarCode(barCode);
-        console.log(productData);
-        
-        setProduct(productData);
-      } catch (err) {
-        setError("No se pudo encontrar el producto. Verifica el código de barras.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { updateProduct, products, loading, error: updateError } = useProduct();
+  const [product, setProduct] = useState<Product | null>(null); // Producto a editar
+  const [loadingSearch, setLoadingSearch] = useState<boolean>(false); // Estado de carga para búsqueda
+  const [searchError, setSearchError] = useState<string | null>(null); // Error en búsqueda
+  const [snackbar, setSnackbar] = useState<Pick<AlertProps, "children" | "severity"> | null>(null);
 
-    const handleCancel = () => {
-        setError(null);
-        setProduct(null);
-      };
-     
+  const handleSearch = async (barCode: string) => {
+    setLoadingSearch(true);
+    setSearchError(null);
+    setProduct(null);
 
+    try {
+      const productData = await getProductsByBarCode(barCode);
+      setProduct(productData);
+    } catch (err) {
+      setSearchError("No se pudo encontrar el producto. Verifica el código de barras.");
+    } finally {
+      setLoadingSearch(false);
+    }
+  };
 
-      const handleFormSubmit = async (product: Partial<Product>) => {
-      
+  const handleCancel = () => {
+    setSearchError(null);
+    setProduct(null);
+  };
 
-        try {
-          if (!product._id) {
-            throw new Error('El producto no tiene un ID válido.');
-          }
-          const id = String(product._id)
+  const handleFormSubmit = (updatedProduct: Partial<Product>) => {
+    if (!updatedProduct._id) {
+      setSnackbar({ children: "El producto no tiene un ID válido.", severity: "error" });
+      return;
+    }
 
-          const productData = await updateProduct(id,product);
-          console.log(productData);
-      
-          const updatedProduct: any = {
-            ...product, // Asegúrate de que `product` contenga todos los campos requeridos
-          };
-      
-          updateExistingProduct(updatedProduct); // Actualiza el producto en Redux
-      
-          setSnackbar({ children: 'Producto actualizado correctamente', severity: 'success' });
-        } catch (error) {
-          console.error('Error al actualizar el producto:', error);
-          setSnackbar({ children: 'Error al actualizar el producto', severity: 'error' });
-        }
-        
-  
-      };
-      
-      const handleCloseSnackbar = () => setSnackbar(null);
+    updateProduct(updatedProduct as Product); // Llama a la función del hook
+
+    setSnackbar({ children: "Producto actualizado correctamente.", severity: "success" });
+  };
+
+  const handleCloseSnackbar = () => setSnackbar(null);
+
+  React.useEffect(() => {
+    // Mostrar errores del hook en el Snackbar
+    if (updateError) {
+      setSnackbar({ children: updateError, severity: "error" });
+    }
+  }, [updateError]);
 
   return (
     <Box sx={{ padding: 2 }}>
-   <ProductFinder 
-  onSearch={handleSearch} // Pasa la función para manejar la búsqueda
-  loading={loading}       // Pasa el estado de carga
-  onCancel={handleCancel} // Pasa la función opcional para manejar la cancelación
-/>
-{error && <Typography color="error" sx={{ marginTop: 2 }}>{error}</Typography>}
+      <ProductFinder
+        onSearch={handleSearch} // Búsqueda del producto
+        loading={loadingSearch} // Indicador de carga para búsqueda
+        onCancel={handleCancel} // Restablecer búsqueda
+      />
+      {searchError && (
+        <Typography color="error" sx={{ marginTop: 2 }}>
+          {searchError}
+        </Typography>
+      )}
+
       {product && (
-      <ProductForm type='update' onSubmit={handleFormSubmit} initialData={product} />
+        <ProductForm
+          type="update"
+          onSubmit={handleFormSubmit}
+          initialData={product}
+        />
       )}
-      {!product && !error && !loading && (
-        <Typography sx={{ marginTop: 2 }}>Por favor, busca un producto utilizando el código de barras.</Typography>
+
+      {/* Mostrar un mensaje cuando no hay producto ni error */}
+      {!product && !searchError && !loadingSearch && (
+        <Typography sx={{ marginTop: 2 }}>
+          Por favor, busca un producto utilizando el código de barras.
+        </Typography>
       )}
-        {!!snackbar && (
+
+      {/* Mostrar indicador de carga durante la operación de actualización */}
+      {loading && (
+        <Box sx={{ textAlign: "center", marginTop: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {/* Mostrar Snackbar con mensajes de éxito o error */}
+      {!!snackbar && (
         <Snackbar
           open
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           onClose={handleCloseSnackbar}
           autoHideDuration={6000}
         >
           <Alert {...snackbar} onClose={handleCloseSnackbar} />
         </Snackbar>
       )}
-  </Box>
-  )
-}
+    </Box>
+  );
+};
 
-export default UpdateProductContainer
+export default UpdateProductContainer;

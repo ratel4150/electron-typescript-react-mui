@@ -1,0 +1,181 @@
+// src\renderer\features\product\containers\AddProductContainer1.tsx
+import React from 'react';
+import ProductForm from '../components/ProductForm';
+
+import { useNavigate } from 'react-router-dom';
+import { Product } from '../types/productTypes';
+
+import { Alert, AlertProps, Snackbar } from '@mui/material';
+import useProduct from '../../../hooks/useProduct';
+
+
+const AddProductContainer: React.FC = () => {
+
+  const { createProduct, addProductLoading, addProductError, post } = useProduct(); // Usamos el hook
+  const navigate = useNavigate();
+  const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
+  React.useEffect(() => {
+    // Si el producto se ha agregado correctamente, muestra un mensaje y redirige
+    if (post) {
+      setSnackbar({ children: 'Producto agregado correctamente', severity: 'success' });
+   /*    setTimeout(() => {
+        navigate('/productos'); // Redirigir a la lista de productos después de un tiempo
+      }, 2000); */
+    }
+  }, [post, navigate]);
+
+  React.useEffect(() => {
+    // Si hay un error al agregar el producto, muestra un mensaje de error
+    if (addProductError) {
+
+
+      setSnackbar({ children: 'Error al agregar el producto', severity: 'error' });
+    }
+  }, [addProductError]);
+
+  const handleFormSubmit = (product: any) => {
+    createProduct(product); // Llama a la acción para agregar el producto
+    
+  };
+  const handleCloseSnackbar = () => setSnackbar(null);
+  return (
+    <> <ProductForm type='add' onSubmit={handleFormSubmit} />
+     {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={6000}
+        >
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )}
+       {addProductLoading && <div>Cargando...</div>} {/* Puedes personalizar esto */}
+    </>
+   
+  );
+};
+
+export default AddProductContainer;
+
+
+
+
+
+// src\renderer\features\product\containers\UpdateProductContainer1.tsx
+import React, { useState } from 'react'
+import ProductFinder from '../components/ProductFinder'
+import { getProductsByBarCode } from '../services/productService';
+import { Product } from '../types/productTypes';
+import { Alert, AlertProps, Box, CircularProgress, Snackbar, Typography } from '@mui/material';
+import ProductForm from '../components/ProductForm';
+import useProduct from '../../../hooks/useProduct';
+
+
+const UpdateProductContainer: React.FC = () => {
+  const { modifyProduct, updatedProduct, updateProductLoading, updateProductError } = useProduct(); // Usamos las propiedades del hook
+    const [product, setProduct] = useState<Product | null>(null); // Almacena una lista de productos
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [snackbar, setSnackbar] = React.useState<Pick<AlertProps, 'children' | 'severity'> | null>(null);
+    const handleSearch = async (barCode:string) => {
+      setLoading(true);
+      setError(null);
+      setProduct(null);
+  
+      try {
+        const productData = await getProductsByBarCode(barCode);
+        console.log(productData);
+        
+        setProduct(productData);
+      } catch (err) {
+        setError("No se pudo encontrar el producto. Verifica el código de barras.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const handleCancel = () => {
+        setError(null);
+        setProduct(null);
+      };
+     
+
+
+      const handleFormSubmit = async (product: Partial<Product>) => {
+      
+
+        try {
+          if (!product._id) {
+              throw new Error('El producto no tiene un ID válido.');
+          }
+          const id = String(product._id);
+
+          // Disparamos la acción de actualización usando modifyProduct
+           modifyProduct(product);
+
+          // Después de actualizar, mostramos el mensaje de éxito
+          setSnackbar({ children: 'Producto actualizado correctamente', severity: 'success' });
+      } catch (error) {
+          console.error('Error al actualizar el producto:', error);
+          setSnackbar({ children: 'Error al actualizar el producto', severity: 'error' });
+      }
+        
+  
+      };
+      
+      const handleCloseSnackbar = () => setSnackbar(null);
+
+      React.useEffect(() => {
+        // Si hay un error en la actualización, lo mostramos en el snackbar
+        if (updateProductError) {
+            setSnackbar({ children: updateProductError, severity: 'error' });
+        }
+        // Si la actualización fue exitosa, mostramos un mensaje de éxito
+        if (updatedProduct) {
+            setSnackbar({ children: 'Producto actualizado con éxito', severity: 'success' });
+            setProduct(updatedProduct); // Actualizamos el producto con el actualizado
+        }
+    }, [updatedProduct, updateProductError]);
+
+  return (
+    <Box sx={{ padding: 2 }}>
+    <ProductFinder
+        onSearch={handleSearch} // Función de búsqueda
+        loading={loading}       // Estado de carga
+        onCancel={handleCancel} // Función de cancelación
+    />
+    {error && <Typography color="error" sx={{ marginTop: 2 }}>{error}</Typography>}
+    
+    {product && (
+        <ProductForm type='update' onSubmit={handleFormSubmit} initialData={product} />
+    )}
+
+    {/* Si no hay producto y no hay error ni carga, mostramos un mensaje */}
+    {!product && !error && !loading && (
+        <Typography sx={{ marginTop: 2 }}>Por favor, busca un producto utilizando el código de barras.</Typography>
+    )}
+
+    {/* Mostrar un indicador de carga mientras se actualiza el producto */}
+    {updateProductLoading && (
+        <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+            <CircularProgress />
+        </Box>
+    )}
+
+    {/* Mostrar el snackbar con el mensaje de éxito o error */}
+    {!!snackbar && (
+        <Snackbar
+            open
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            onClose={handleCloseSnackbar}
+            autoHideDuration={6000}
+        >
+            <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+    )}
+</Box>
+  )
+}
+
+export default UpdateProductContainer

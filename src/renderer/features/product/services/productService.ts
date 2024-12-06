@@ -1,3 +1,4 @@
+// src\renderer\features\product\services\productService.ts
 import axios from 'axios';
 import { Product } from '../types/productTypes';
 import axiosInstance from '../../../api/axiosInstance';
@@ -8,7 +9,7 @@ export const getProducts = async (): Promise<Product[]> => {
   try {
     const store = '673228023ecf7f051ff3dd6d'
     const response = await axiosInstance.get(`products?store=${store}`)
-    console.log(response);
+    console.log(response.data);
     return response.data
     
     
@@ -69,11 +70,13 @@ export const deleteProduct = async (id: string): Promise<void> => {
   await axios.delete(`${API_BASE_URL}/${id}`);
 };
 
-export const updateProduct = async (id: string, product: Partial<Product>): Promise<Product> => {
+export const updateProduct = async ( product: Partial<Product>): Promise<Product> => {
   try {
-    
-   
-    const response = await axiosInstance.put(`products/${id}`,product)
+    if (!product._id || typeof product._id !== "string") {
+      throw new Error("ID del producto inválido.");
+    }
+
+    const response = await axiosInstance.put(`products/${product._id}`, product);
     console.log(response);
     return response.data
     

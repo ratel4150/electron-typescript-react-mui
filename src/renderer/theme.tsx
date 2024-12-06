@@ -1,3 +1,4 @@
+// src\renderer\theme.tsx
 import { createTheme } from "@mui/material/styles";
 
 // Create a Material-UI theme instance

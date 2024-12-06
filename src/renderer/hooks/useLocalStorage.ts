@@ -1,3 +1,4 @@
+// src\renderer\hooks\useLocalStorage.ts
 import React from 'react'
 
 function useLocalStorage(keyName:any, defaultValue:any) {

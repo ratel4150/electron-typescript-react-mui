@@ -1,6 +1,8 @@
+// src\renderer\features\product\pages\AddProductPage.tsx
 import React from 'react';
-import AddProductContainer from '../containers/AddProductContainer';
+
 import { Box, Typography } from '@mui/material';
+import AddProductContainer from '../containers/AddProductContainer';
 
 const AddProductPage: React.FC = () => {
   return (
@@ -11,7 +13,7 @@ const AddProductPage: React.FC = () => {
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
       Completa todos los campos para asegurar una correcta adición del producto a nuestro sistema. Cualquier información omitida podría afectar la gestión y visualización del inventario.
       </Typography>
-      <AddProductContainer />
+       <AddProductContainer /> 
     </Box>
   );
 };

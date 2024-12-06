@@ -1,4 +1,4 @@
-// src/api/axiosInstance.ts
+// src\renderer\api\axiosInstance.ts
 
 import axios from 'axios';
 

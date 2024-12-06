@@ -1,3 +1,4 @@
+// src\renderer\features\product\components\ProductFinder.tsx
 import { Box, Button, InputAdornment, Stack, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { ImBarcode } from "react-icons/im";

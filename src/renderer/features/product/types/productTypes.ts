@@ -1,4 +1,4 @@
-// Tipos básicos
+// src\renderer\features\product\types\productTypes.ts
 export interface Product {
 price: any;
   _id: string;
