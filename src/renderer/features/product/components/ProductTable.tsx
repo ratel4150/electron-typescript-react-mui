@@ -1,3 +1,4 @@
+// src\renderer\features\product\components\ProductTable.tsx
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, TableContainer, Paper, Button } from '@mui/material';
 import { Product } from '../types/productTypes';
