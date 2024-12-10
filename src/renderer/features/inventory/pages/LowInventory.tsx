@@ -1,3 +1,4 @@
+// src\renderer\features\inventory\pages\LowInventory.tsx
 import React from 'react'
 
 function LowInventory() {

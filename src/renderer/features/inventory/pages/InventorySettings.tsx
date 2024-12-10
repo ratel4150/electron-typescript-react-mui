@@ -1,3 +1,4 @@
+// src\renderer\features\inventory\pages\InventorySettings.tsx
 import React from 'react'
 
 function InventorySettings() {

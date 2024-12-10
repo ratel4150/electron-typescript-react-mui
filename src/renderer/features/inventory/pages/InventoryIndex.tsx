@@ -1,3 +1,4 @@
+// src\renderer\features\inventory\pages\InventoryIndex.tsx
 import React from "react";
 import { Box, Tabs, Tab } from "@mui/material";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";

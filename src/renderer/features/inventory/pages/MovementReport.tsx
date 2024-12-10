@@ -1,3 +1,4 @@
+// src\renderer\features\inventory\pages\MovementReport.tsx
 import React from 'react'
 
 function MovementReport() {

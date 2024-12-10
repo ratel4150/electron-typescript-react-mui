@@ -2,10 +2,12 @@
 
 import productReducer from './productSlice';
 import departmentReducer from './departmenSlice'
+import inventoryItemReducer from './inventoryItemSlice'
 
 const rootReducers = {
   products: productReducer,
-  departments:departmentReducer
+  departments:departmentReducer,
+  inventoryItem:inventoryItemReducer
   // Puedes agregar más slices aquí
 };
 
