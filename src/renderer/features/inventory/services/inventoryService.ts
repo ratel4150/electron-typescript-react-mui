@@ -6,7 +6,7 @@ export const getAllInventoryItems =async():Promise<any>=>{
 
     try {
         const store = '673228023ecf7f051ff3dd6d'
-        const response = await axiosInstance.get(`inventory`)
+        const response = await axiosInstance.get(`inventory/inventory`)
         console.log(response.data);
         return response.data
         

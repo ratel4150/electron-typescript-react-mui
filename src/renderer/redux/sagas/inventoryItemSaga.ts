@@ -1,21 +1,30 @@
 // src\renderer\redux\sagas\inventoryItemSaga.ts
 
-import { call, put } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import { Department } from "../../features/product/types/departmentTypes";
-import { fetchDepartmentsFailure, fetchDepartmentsRequest, fetchDepartmentsSuccess } from "../slices/departmenSlice";
-import { getDepartments } from "../../features/product/services/departmentService";
+
+import { InventoryItem } from "../../features/product/types/inventoryItem";
+import { fetchInventoryItemTypesFailure, fetchInventoryItemTypesRequest, fetchInventoryItemTypesSuccess } from "../slices/inventoryItemSlice";
+import { getAllInventoryItems } from "../../features/inventory/services/inventoryService";
 
 // Saga para obtener los productos
-function* getDepartmentsSaga(): Generator<any, void, Department[]> {
+function* getInventoryItemSaga(): Generator<any, void, InventoryItem[]> {
     try {
-      yield put(fetchDepartmentsRequest());
+      yield put(fetchInventoryItemTypesRequest());
   
       
-      const products: Department[] = yield call(getDepartments);
-      console.log(products);
+      const inventoryItem: InventoryItem[] = yield call(getAllInventoryItems);
+      console.log(inventoryItem);
       
-      yield put(fetchDepartmentsSuccess(products));
+      yield put(fetchInventoryItemTypesSuccess(inventoryItem));
     } catch (error: any) {
-      yield put(fetchDepartmentsFailure(error.message || "Unknown error"));
+      yield put(fetchInventoryItemTypesFailure(error.message || "Unknown error"));
     }
   }
+// Watchers para escuchar las acciones de productos
+export default function* inventoryItemSaga() {
+  yield takeEvery("inventoryItem/fetchInventoryItem", getInventoryItemSaga);
+ /*  yield takeEvery("products/addProduct", addProductSaga);
+  yield takeEvery("products/updateProduct", updateProductSaga);
+  yield takeEvery("products/deleteProduct", deleteProductSaga); */
+}

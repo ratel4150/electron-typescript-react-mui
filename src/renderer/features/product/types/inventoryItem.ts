@@ -52,7 +52,13 @@ interface PriceHistory {
   // Interfaz para Inventory Item
   export interface InventoryItem {
     _id:string,
-    product: string; // Referencia al producto
+    product: {
+      name: string;
+      sku:string;
+      pricing:{
+        sellingPrice:string;
+      }
+    };
     quantity: number;
     reservedQuantity?: number;
     availableQuantity: number;
