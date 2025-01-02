@@ -51,10 +51,12 @@ interface PriceHistory {
   
   // Interfaz para Inventory Item
   export interface InventoryItem {
+    id:string;
     _id:string,
     product: {
       name: string;
       sku:string;
+      barcode:string;
       pricing:{
         sellingPrice:string;
       }

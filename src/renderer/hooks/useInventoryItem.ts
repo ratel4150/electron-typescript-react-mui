@@ -3,6 +3,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { useCallback } from "react";
+import { InventoryItem } from "../features/product/types/inventoryItem";
 
 const useInventoryItem = () => {
 
@@ -18,22 +19,30 @@ const useInventoryItem = () => {
     }, [dispatch]);
 
 
-   /*  const addDepartment = useCallback(
-        (department: Department) => {
-          dispatch({ type: "departments/addDepartment", payload: department }); // Dispatch the correct action type
+     const addInventoryItemn = useCallback(
+        (inventoryItem:InventoryItem ) => {
+          dispatch({ type: "inventoryItem/addInventoryItem", payload: inventoryItem }); // Dispatch the correct action type
         },
         [dispatch]
-      ); */
+      ); 
+
+        // Función para actualizar un producto existente
+        const updateInventoryItem = useCallback(
+          (inventoryItem: InventoryItem) => {
+            dispatch({ type: "inventoryItem/updateInventoryItem", payload: inventoryItem }); // Dispatch the correct action type
+          },
+          [dispatch]
+        );
 
 
 
     return {
         inventoryItemTypes,
         loading,
-        error,
         operationStatus,
         fetchInventoryItems,
-       /*  addDepartment */
+         addInventoryItemn,
+         updateInventoryItem
     }
 
 }

@@ -1,11 +1,25 @@
 // src\renderer\features\inventory\components\InventoryDataGrid.tsx
-import { Alert, Box, Chip, IconButton, Snackbar, TextField, Typography } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Alert, Box, Button, Chip, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import { DataGrid, GridActionsCellItem, GridColDef, GridEventListener, GridRowEditStopReasons, GridRowId, GridRowModel, GridRowModes, GridRowModesModel, GridRowsProp, GridSlotProps, GridToolbarContainer } from '@mui/x-data-grid';
 import React from 'react'
 import useInventoryItem from '../../../hooks/useInventoryItem';
 
 import { LuArrowDownRight } from "react-icons/lu";
+import { GiSave, GiCancel} from "react-icons/gi";
+import { MdEdit } from "react-icons/md";
+import { AiTwotoneDelete } from "react-icons/ai";
 
+
+
+
+declare module '@mui/x-data-grid' {
+    interface ToolbarPropsOverrides {
+        setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+        setRowModesModel: (
+            newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
+        ) => void;
+    }
+}
 
 
 
@@ -36,11 +50,15 @@ const inventoryData = [
   ];
 const InventoryDataGrid = () => {
 
-    const [rows, setRows] = React.useState(inventoryData);
+  const {inventoryItemTypes,fetchInventoryItems,loading,operationStatus}=useInventoryItem()
   const [filter, setFilter] = React.useState("");
   const [alert, setAlert] = React.useState(null);
 
-  const {error,inventoryItemTypes,fetchInventoryItems,loading,operationStatus}=useInventoryItem()
+  
+  const initialRows: GridRowsProp = inventoryItemTypes || [];
+
+  const [rows, setRows] = React.useState(initialRows);
+
 
 
   React.useEffect(() => {
@@ -50,7 +68,14 @@ const InventoryDataGrid = () => {
     
   }, [fetchInventoryItems])
 
-  console.log(inventoryItemTypes);
+
+  // Sincronizar los datos del estado de Redux con la tabla
+  React.useEffect(() => {
+    setRows(inventoryItemTypes);
+  }, [inventoryItemTypes]);
+
+
+
   
   
 
@@ -61,30 +86,132 @@ const InventoryDataGrid = () => {
 
   
 
-  const filteredRows = inventoryItemTypes
+
+  console.log(rows)
+
+  const filteredRows = rows
   .map((item) => ({
     ...item,
-    productName: item.product?.name || "", // Asegura que sea una cadena para evitar errores
+/*     productName: item.product?.name || "", // Asegura que sea una cadena para evitar errores
     productSku: item.product?.sku || "",
-    productSellingPrice: item.product?.pricing?.sellingPrice || "",
+    productBarCode: item.product?.barcode || "",
+    productSellingPrice: item.product?.pricing?.sellingPrice || "", */
   }))
   .filter((row) => {
-    return row.productName.toLowerCase().includes(filter); // Usa productName en lugar de product.name
+    return row?.productName?.toLowerCase().includes(filter); // Usa productName en lugar de product.name
   });
 
-  console.log(filteredRows)
 
-  const handleDelete = (id: number) => {
-    setRows((prev) => prev.filter((row) => row.id !== id));
-/*     setAlert({ type: "success", message: "Producto eliminado correctamente." }); */
-  };
 
-  const columns: GridColDef<(typeof inventoryItemTypes)[number]>[] = [
+
+  
+
+
+
+  function EditToolbar(props: GridSlotProps['toolbar']) {
+    const { setRows, setRowModesModel } = props;
+
+
+    
+
+ 
+
+   
+
+    const handleClick = () => {
+        const id = 1; // Genera un ID único para la nueva fila
+        setRows((oldRows: any) => [
+            ...oldRows,
+
+    
+        ]);
+    
+        setRowModesModel((oldModel: any) => ({
+            ...oldModel,
+            [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' }, // Fija el foco en el campo "name"
+        }));
+    };
+
+    return (
+        <GridToolbarContainer>
+            <Button color="primary"  onClick={handleClick}>
+                Agregar Registro
+            </Button>
+            <Button color="primary" >
+                Exportar
+            </Button>
+            <Button  sx={{ mr: 2 }} component="label" size="small" >
+            Importar Productos
+            <input
+                type="file"
+                accept=".xlsx, .xls"
+                hidden
+            
+            />
+            
+        </Button>
+
+        <Button color="primary" /* onClick={exportToExcel} */>
+                Guardar Registros
+            </Button>
+        </GridToolbarContainer>)
+}
+
+
+const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+
+const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
+  if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+    event.defaultMuiPrevented = true;
+  }
+};
+
+const handleEditClick = (id: GridRowId) => () => {
+  setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+};
+
+const handleSaveClick = (id: GridRowId) => () => {
+  setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+};
+
+const handleDeleteClick = (id: GridRowId) => () => {
+    console.log(id);
+    const _id =id
+    
+  setRows(rows?.filter((row) => row?._id !== _id));
+};
+
+const handleCancelClick = (id: GridRowId) => () => {
+  setRowModesModel({
+    ...rowModesModel,
+    [id]: { mode: GridRowModes.View, ignoreModifications: true },
+  });
+
+  const editedRow = rows.find((row) => row.id === id);
+  if (editedRow!.isNew) {
+    setRows(rows.filter((row) => row.id !== id));
+  }
+};
+
+const processRowUpdate = (newRow: GridRowModel) => {
+  const updatedRow = { ...newRow, isNew: false };
+  setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  return updatedRow;
+};
+
+const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+  setRowModesModel(newRowModesModel);
+};
+
+  
+
+  const columns: GridColDef[] = [
 
    
       { field: "productName", headerName: "Producto", width: 200},
       { field: "productSku", headerName: "SKU", width: 150},
-      { field: "quantity", headerName: "Cantidad Total", width: 150, type: "number" },
+      { field: "productBarCode", headerName: "Codigo", width: 150},
+      { field: "quantity", headerName: "Cantidad Total", width: 150, type: "number",editable:true},
       { field: "reservedQuantity", headerName: "Cantidad Reservada", width: 150, type: "number" },
     /*   { 
         field: "availableQuantity", 
@@ -135,6 +262,54 @@ const InventoryDataGrid = () => {
        
       ) },
       { field: "lastUpdatedAt", headerName: "Actualizado el", width: 200 },
+      {
+        field: 'actions',
+        type: 'actions',
+        headerName: 'Actions',
+        width: 100,
+        cellClassName: 'actions',
+        getActions: ({ id }) => {
+          const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+  
+          if (isInEditMode) {
+            return [
+              <GridActionsCellItem
+                icon={<GiSave/>}
+                label="Save"
+                sx={{
+                  color: 'primary.main',
+                }}
+                 onClick={handleSaveClick(id)} 
+              />,
+              <GridActionsCellItem
+                icon={<GiCancel />}
+                label="Cancel"
+                className="textPrimary"
+               onClick={handleCancelClick(id)} 
+                color="inherit"
+              />,
+            ];
+          }
+
+
+  
+          return [
+            <GridActionsCellItem
+              icon={<MdEdit />}
+              label="Edit"
+              className="textPrimary"
+               onClick={handleEditClick(id)}
+              color="inherit"
+            />,
+            <GridActionsCellItem
+              icon={<AiTwotoneDelete />}
+              label="Delete"
+              onClick={handleDeleteClick(id)} 
+              color="inherit"
+            />,
+          ];
+        },
+      },
    /*  { field: "product", headerName: "Producto", width: 200 },
     { field: "sku", headerName: "SKU", width: 150 },
     { field: "warehouse", headerName: "Almacén", width: 200 },
@@ -224,10 +399,18 @@ const InventoryDataGrid = () => {
       />
     </Box>
     <DataGrid
-      rows={filteredRows}
+      rows={rows}
       columns={columns}
       getRowId={(row) => row._id}
-      
+      editMode="row"
+      rowModesModel={rowModesModel}
+      onRowModesModelChange={handleRowModesModelChange}
+      onRowEditStop={handleRowEditStop}
+      processRowUpdate={processRowUpdate}
+      slots={{ toolbar: EditToolbar }}
+      slotProps={{
+        toolbar: { setRows, setRowModesModel },
+      }}
     
 
 

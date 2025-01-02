@@ -30,6 +30,14 @@ const InventoryMainLayout: React.FC = () => {
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     navigate(tabs[newValue].path);
   };
+  React.useEffect(() => {
+    // Redirige a la primera pestaña si la ruta no coincide con ninguna pestaña
+    if (currentTab === -1) {
+      navigate(tabs[0].path);
+    }
+  }, [currentTab, navigate, tabs]);
+
+  
 
   return (
     <Box sx={{ padding: 2 }}>

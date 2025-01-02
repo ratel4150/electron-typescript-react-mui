@@ -1,3 +1,4 @@
+// src\renderer\layouts\InventoryLayout\InventoryMainLayout.tsx
 import React from 'react'
 import InventoryIndex from '../../features/inventory/pages/InventoryIndex'
 
